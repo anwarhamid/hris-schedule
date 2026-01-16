@@ -255,9 +255,24 @@
             };
 
             const getShift = (empId, date) => {
-                const type = schedules.value?.[empId]?.[date]?.type;
+                const shiftData = schedules.value?.[empId]?.[date];
+                const type = shiftData?.type;
+                
+                // Jika tidak ada tipe shift, kembalikan 'none'
                 if (!type) return { type: 'none', time: '--' };
-                return { type, time: settings.shifts[type]?.time || '--' };
+                
+                // Mengambil jam dari settings.shifts berdasarkan tipe (morning/middle/afternoon/off)
+                // Jika data di settings belum ada, kita berikan fallback jam default
+                const fallbackTimes = {
+                    morning: '07:00 - 15:00',
+                    middle: '09:00 - 17:00',
+                    afternoon: '15:00 - 23:00',
+                    off: 'Day Off'
+                };
+
+                const time = settings.shifts[type]?.time || fallbackTimes[type] || '--';
+                
+                return { type, time };
             };
 
             const getShiftClass = (t) => {
