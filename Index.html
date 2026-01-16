@@ -239,10 +239,19 @@
             };
 
             const isDateAllowed = (dateStr) => {
-                let today = new Date(); today.setHours(0,0,0,0);
+                let today = new Date(); 
+                today.setHours(0, 0, 0, 0);
+                
                 let target = new Date(dateStr);
-                let maxDate = new Date(); maxDate.setDate(today.getDate() + 30);
-                return target >= today && target <= maxDate;
+                target.setHours(0, 0, 0, 0);
+
+                // Tentukan batas maksimal: Hari ini + 30 hari
+                let maxDate = new Date(); 
+                maxDate.setDate(today.getDate() + 30);
+                
+                // Hanya batasi masa depan (max 30 hari), 
+                // masa lalu tidak dibatasi lagi (bisa diedit)
+                return target <= maxDate;
             };
 
             const getShift = (empId, date) => {
